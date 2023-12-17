@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace tester {
     public partial class Form1 : Form {
@@ -59,9 +60,10 @@ namespace tester {
 
         private void generateTests_button_Click(object sender, EventArgs e) {
             isFileClicked = false;
+            passed_textBox.Text = "";
+            failed_textBox.Text = "";
             countTests = (int)count_numericUpDown.Value;
             errorRate = (double)errorRate_numericUpDown.Value;
-            step = (double)step_numericUpDown.Value;
             leftBorder = (double)left_numericUpDown.Value;
             rightBorder = (double)right_numericUpDown.Value;
             method = myDict[method_comboBox.SelectedItem.ToString()];
@@ -86,6 +88,14 @@ namespace tester {
             if (leftStep >= rightStep) {
                 MessageBox.Show("Правая граница шага должна быть больше левой!", "Ошибка!");
                 return;
+            }
+            test_button.Enabled = true;
+            saveTests_button.Enabled=true;
+
+            if (isPositive) {
+                compare_button.Enabled = true;
+            } else {
+                compare_button.Enabled = false;
             }
 
             if (argsForTest != null) {
@@ -208,6 +218,8 @@ namespace tester {
         }
 
         private void test_button_Click(object sender, EventArgs e) {
+            passed_textBox.Text = "";
+            failed_textBox.Text = "";
             string resultOfExe = "";
             string successResult = "";
             string failedResult = "";
@@ -241,6 +253,7 @@ namespace tester {
 
             passed_textBox.Text = successResult;
             failed_textBox.Text = failedResult;
+            save_result_button.Enabled = true;
 
             //passed_textBox.Text = resultOfExe;
         }
@@ -389,6 +402,48 @@ namespace tester {
             } else {
                 MessageBox.Show("File was not saved!", "Warning!");
             }
+        }
+
+
+
+        private void DataForChatrs() {
+           
+        }
+
+        private void compare_button_Click(object sender, EventArgs e) {
+            List<string> dataForCharts = new List<string>();
+
+            foreach (var arg in argsForTest) {
+                string[] a = arg.Split();
+                a[3] = "1";
+                dataForCharts.Add(string.Join(" ", a));
+                a[3] = "2";
+                dataForCharts.Add(string.Join(" ", a));
+                a[3] = "3";
+                dataForCharts.Add(string.Join(" ", a));
+            }
+
+            List<string> firstIntegral = new List<string>();
+            List<string> secondIntegral = new List<string>();
+            List<string> thirdIntegral = new List<string>();
+            List<string> ownIntegral = new List<string>();
+
+            for (int i = 0; i < dataForCharts.Count; i++) {
+                string result = TestProgram(dataForCharts[i]).Substring(4);
+                if (i % 3 == 0) {
+                    firstIntegral.Add(result);
+                    ownIntegral.Add(Integral().ToString());
+                } else if (i % 3 == 1) {
+                    secondIntegral.Add(result);
+                } else {
+                    thirdIntegral.Add(result);
+                }
+
+            }
+
+            ChartsAndTableForm chartsAndTableForm = new ChartsAndTableForm(firstIntegral, secondIntegral, thirdIntegral, ownIntegral);
+            chartsAndTableForm.ShowDialog();
+
         }
     }
 }

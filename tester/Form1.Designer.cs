@@ -49,19 +49,17 @@
             this.passed_textBox = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.failed_textBox = new System.Windows.Forms.TextBox();
-            this.step_numericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.label10 = new System.Windows.Forms.Label();
             this.leftStep_numericUpDown = new System.Windows.Forms.NumericUpDown();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.rightStep_numericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.compare_button = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.count_numericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorRate_numericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.left_numericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.right_numericUpDown)).BeginInit();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.step_numericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.leftStep_numericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rightStep_numericUpDown)).BeginInit();
             this.SuspendLayout();
@@ -113,10 +111,10 @@
             this.errorRate_numericUpDown.Size = new System.Drawing.Size(193, 30);
             this.errorRate_numericUpDown.TabIndex = 3;
             this.errorRate_numericUpDown.Value = new decimal(new int[] {
-            1,
+            5,
             0,
             0,
-            196608});
+            65536});
             // 
             // label2
             // 
@@ -200,7 +198,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label5.Location = new System.Drawing.Point(179, 421);
+            this.label5.Location = new System.Drawing.Point(179, 383);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(74, 25);
             this.label5.TabIndex = 8;
@@ -214,7 +212,7 @@
             "парабол",
             "трапеции",
             "Монте-Карло"});
-            this.method_comboBox.Location = new System.Drawing.Point(280, 418);
+            this.method_comboBox.Location = new System.Drawing.Point(280, 380);
             this.method_comboBox.Name = "method_comboBox";
             this.method_comboBox.Size = new System.Drawing.Size(193, 33);
             this.method_comboBox.TabIndex = 9;
@@ -257,7 +255,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label6.Location = new System.Drawing.Point(43, 472);
+            this.label6.Location = new System.Drawing.Point(43, 433);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(397, 25);
             this.label6.TabIndex = 12;
@@ -266,7 +264,7 @@
             // coef_textBox
             // 
             this.coef_textBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.coef_textBox.Location = new System.Drawing.Point(17, 509);
+            this.coef_textBox.Location = new System.Drawing.Point(17, 470);
             this.coef_textBox.Name = "coef_textBox";
             this.coef_textBox.Size = new System.Drawing.Size(456, 30);
             this.coef_textBox.TabIndex = 13;
@@ -275,9 +273,9 @@
             // generateTests_button
             // 
             this.generateTests_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.generateTests_button.Location = new System.Drawing.Point(17, 558);
+            this.generateTests_button.Location = new System.Drawing.Point(12, 528);
             this.generateTests_button.Name = "generateTests_button";
-            this.generateTests_button.Size = new System.Drawing.Size(193, 67);
+            this.generateTests_button.Size = new System.Drawing.Size(236, 67);
             this.generateTests_button.TabIndex = 14;
             this.generateTests_button.Text = "Сгенерировать тест-кейсы";
             this.generateTests_button.UseVisualStyleBackColor = true;
@@ -286,10 +284,11 @@
             // test_button
             // 
             this.test_button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.test_button.Enabled = false;
             this.test_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.test_button.Location = new System.Drawing.Point(17, 631);
+            this.test_button.Location = new System.Drawing.Point(10, 601);
             this.test_button.Name = "test_button";
-            this.test_button.Size = new System.Drawing.Size(456, 49);
+            this.test_button.Size = new System.Drawing.Size(474, 49);
             this.test_button.TabIndex = 15;
             this.test_button.Text = "Пройти";
             this.test_button.UseVisualStyleBackColor = false;
@@ -298,9 +297,9 @@
             // read_button
             // 
             this.read_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.read_button.Location = new System.Drawing.Point(280, 558);
+            this.read_button.Location = new System.Drawing.Point(256, 528);
             this.read_button.Name = "read_button";
-            this.read_button.Size = new System.Drawing.Size(193, 67);
+            this.read_button.Size = new System.Drawing.Size(228, 67);
             this.read_button.TabIndex = 16;
             this.read_button.Text = "Загрузить тест-кейсы";
             this.read_button.UseVisualStyleBackColor = true;
@@ -308,10 +307,11 @@
             // 
             // saveTests_button
             // 
+            this.saveTests_button.Enabled = false;
             this.saveTests_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.saveTests_button.Location = new System.Drawing.Point(17, 686);
+            this.saveTests_button.Location = new System.Drawing.Point(10, 656);
             this.saveTests_button.Name = "saveTests_button";
-            this.saveTests_button.Size = new System.Drawing.Size(456, 49);
+            this.saveTests_button.Size = new System.Drawing.Size(238, 49);
             this.saveTests_button.TabIndex = 17;
             this.saveTests_button.Text = "Сохранить тест-кейсы";
             this.saveTests_button.UseVisualStyleBackColor = true;
@@ -319,10 +319,11 @@
             // 
             // save_result_button
             // 
+            this.save_result_button.Enabled = false;
             this.save_result_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.save_result_button.Location = new System.Drawing.Point(17, 741);
+            this.save_result_button.Location = new System.Drawing.Point(256, 656);
             this.save_result_button.Name = "save_result_button";
-            this.save_result_button.Size = new System.Drawing.Size(456, 49);
+            this.save_result_button.Size = new System.Drawing.Size(228, 49);
             this.save_result_button.TabIndex = 18;
             this.save_result_button.Text = "Сохранить результат";
             this.save_result_button.UseVisualStyleBackColor = true;
@@ -331,7 +332,7 @@
             // test_textBox
             // 
             this.test_textBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.test_textBox.Location = new System.Drawing.Point(500, 54);
+            this.test_textBox.Location = new System.Drawing.Point(512, 54);
             this.test_textBox.Multiline = true;
             this.test_textBox.Name = "test_textBox";
             this.test_textBox.ReadOnly = true;
@@ -343,7 +344,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label7.Location = new System.Drawing.Point(581, 18);
+            this.label7.Location = new System.Drawing.Point(593, 18);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(120, 25);
             this.label7.TabIndex = 20;
@@ -353,7 +354,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label8.Location = new System.Drawing.Point(860, 23);
+            this.label8.Location = new System.Drawing.Point(872, 23);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(242, 25);
             this.label8.TabIndex = 22;
@@ -362,7 +363,7 @@
             // passed_textBox
             // 
             this.passed_textBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.passed_textBox.Location = new System.Drawing.Point(832, 54);
+            this.passed_textBox.Location = new System.Drawing.Point(844, 54);
             this.passed_textBox.Multiline = true;
             this.passed_textBox.Name = "passed_textBox";
             this.passed_textBox.ReadOnly = true;
@@ -374,7 +375,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label9.Location = new System.Drawing.Point(1181, 20);
+            this.label9.Location = new System.Drawing.Point(1193, 20);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(263, 25);
             this.label9.TabIndex = 24;
@@ -383,52 +384,13 @@
             // failed_textBox
             // 
             this.failed_textBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.failed_textBox.Location = new System.Drawing.Point(1160, 54);
+            this.failed_textBox.Location = new System.Drawing.Point(1172, 54);
             this.failed_textBox.Multiline = true;
             this.failed_textBox.Name = "failed_textBox";
             this.failed_textBox.ReadOnly = true;
             this.failed_textBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.failed_textBox.Size = new System.Drawing.Size(310, 736);
             this.failed_textBox.TabIndex = 23;
-            // 
-            // step_numericUpDown
-            // 
-            this.step_numericUpDown.DecimalPlaces = 6;
-            this.step_numericUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.step_numericUpDown.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            196608});
-            this.step_numericUpDown.Location = new System.Drawing.Point(280, 260);
-            this.step_numericUpDown.Maximum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.step_numericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            393216});
-            this.step_numericUpDown.Name = "step_numericUpDown";
-            this.step_numericUpDown.Size = new System.Drawing.Size(193, 30);
-            this.step_numericUpDown.TabIndex = 26;
-            this.step_numericUpDown.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            393216});
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label10.Location = new System.Drawing.Point(47, 260);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(201, 25);
-            this.label10.TabIndex = 25;
-            this.label10.Text = "Шаг интегрирования";
             // 
             // leftStep_numericUpDown
             // 
@@ -439,7 +401,7 @@
             0,
             0,
             196608});
-            this.leftStep_numericUpDown.Location = new System.Drawing.Point(102, 346);
+            this.leftStep_numericUpDown.Location = new System.Drawing.Point(102, 308);
             this.leftStep_numericUpDown.Maximum = new decimal(new int[] {
             499999,
             0,
@@ -463,7 +425,7 @@
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label11.Location = new System.Drawing.Point(112, 303);
+            this.label11.Location = new System.Drawing.Point(112, 265);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(297, 25);
             this.label11.TabIndex = 27;
@@ -473,7 +435,7 @@
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label12.Location = new System.Drawing.Point(57, 346);
+            this.label12.Location = new System.Drawing.Point(57, 308);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(35, 25);
             this.label12.TabIndex = 29;
@@ -483,7 +445,7 @@
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label13.Location = new System.Drawing.Point(268, 346);
+            this.label13.Location = new System.Drawing.Point(268, 308);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(35, 25);
             this.label13.TabIndex = 31;
@@ -498,7 +460,7 @@
             0,
             0,
             196608});
-            this.rightStep_numericUpDown.Location = new System.Drawing.Point(313, 346);
+            this.rightStep_numericUpDown.Location = new System.Drawing.Point(313, 308);
             this.rightStep_numericUpDown.Maximum = new decimal(new int[] {
             5,
             0,
@@ -513,23 +475,35 @@
             this.rightStep_numericUpDown.Size = new System.Drawing.Size(127, 30);
             this.rightStep_numericUpDown.TabIndex = 30;
             this.rightStep_numericUpDown.Value = new decimal(new int[] {
-            1,
+            10,
             0,
             0,
-            65536});
+            393216});
+            // 
+            // compare_button
+            // 
+            this.compare_button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.compare_button.Enabled = false;
+            this.compare_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.compare_button.Location = new System.Drawing.Point(12, 711);
+            this.compare_button.Name = "compare_button";
+            this.compare_button.Size = new System.Drawing.Size(472, 49);
+            this.compare_button.TabIndex = 32;
+            this.compare_button.Text = "Исследовать";
+            this.compare_button.UseVisualStyleBackColor = false;
+            this.compare_button.Click += new System.EventHandler(this.compare_button_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1482, 802);
+            this.ClientSize = new System.Drawing.Size(1501, 802);
+            this.Controls.Add(this.compare_button);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.rightStep_numericUpDown);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.leftStep_numericUpDown);
             this.Controls.Add(this.label11);
-            this.Controls.Add(this.step_numericUpDown);
-            this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.failed_textBox);
             this.Controls.Add(this.label8);
@@ -564,7 +538,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.right_numericUpDown)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.step_numericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.leftStep_numericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rightStep_numericUpDown)).EndInit();
             this.ResumeLayout(false);
@@ -600,13 +573,12 @@
         private System.Windows.Forms.TextBox passed_textBox;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox failed_textBox;
-        private System.Windows.Forms.NumericUpDown step_numericUpDown;
-        private System.Windows.Forms.Label label10;
         private System.Windows.Forms.NumericUpDown leftStep_numericUpDown;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.NumericUpDown rightStep_numericUpDown;
+        private System.Windows.Forms.Button compare_button;
     }
 }
 
