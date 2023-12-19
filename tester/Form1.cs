@@ -21,7 +21,6 @@ namespace tester {
 
         int countTests;
         double errorRate;
-        double step;
         double leftBorder;
         double rightBorder;
         double leftStep;
@@ -49,8 +48,6 @@ namespace tester {
             double leftPower = leftBorder;
             double rightPower = rightBorder;
             for (int i = 0; i < coeffsList.Count(); i++) {
-
-                //s += coeffsList[i] * ((Math.Pow(rightBorder, i + 1) / (i + 1)) - (Math.Pow(leftBorder, i + 1) / (i + 1)));
                 s += coeffsList[i] * ((rightPower - leftPower) / (i + 1));
                 leftPower *= leftBorder;
                 rightPower *= rightBorder;
@@ -248,14 +245,12 @@ namespace tester {
                     }
                 }
 
-                //resultOfExe += "\r\n";
             }
 
             passed_textBox.Text = successResult;
             failed_textBox.Text = failedResult;
             save_result_button.Enabled = true;
 
-            //passed_textBox.Text = resultOfExe;
         }
 
         private string PrintResultOfTest(int n, char type, string comparator, bool isSuccess) {
@@ -299,9 +294,9 @@ namespace tester {
                         sr.WriteLine(data);
                     }
                 }
-                MessageBox.Show("File was successfully saved!", "Saving!");
+                MessageBox.Show("Тест-кейсы были успешно сохранены!", "Успех!");
             } else {
-                MessageBox.Show("File was not saved!", "Warning!");
+                MessageBox.Show("Тест-кейсы не были сохранены!", "Ошибка!");
             }
         }
 
@@ -314,7 +309,7 @@ namespace tester {
             openFileDialog.RestoreDirectory = true;
 
             if (openFileDialog.ShowDialog() != DialogResult.OK) {
-                MessageBox.Show("File was not read!", "Warning!");
+                MessageBox.Show("Файл не был прочтен!", "Ошибка!");
                 return;
             }
 
@@ -328,7 +323,8 @@ namespace tester {
             }
             argsForTest.Clear();
             MakeTestsFromSavingInput(data);
-            //CheckingData();
+            test_button.Enabled = true;
+            saveTests_button.Enabled = true;
         }
 
         private void MakeTestsFromSavingInput(List<string> data) {
@@ -360,16 +356,6 @@ namespace tester {
                 }
             }
             test_textBox.Text = test;
-            //string test = $"TEST {n} N\r\n";
-            //var step = GenerateRandomString(n);
-            //string X = $"{(decimal)leftBorder} {(decimal)rightBorder} {step} {method} {coeffs}";
-            //string result = "Шаг интегрирования должен быть в пределах [0.000001;0.5]";
-            //test += $"X = {X}\r\n";
-            //test += $"EPS = {(decimal)errorRate}\r\n";
-            //test += $"YE = {result}\r\n\r\n";
-            //argsForTest.Add(X);
-            //resultsForTestExpected.Add(result);
-            //dataForSavingInput.Add($"N~{errorRate}~{result}~{X}");
         }
 
         private List<string> ReadDataFromFile(StreamReader streamReader) {
@@ -398,9 +384,9 @@ namespace tester {
                     sr.WriteLine(failed_textBox.Text);
                     
                 }
-                MessageBox.Show("File was successfully saved!", "Saving!");
+                MessageBox.Show("Реузльтат успешно сохранен!", "Успех!");
             } else {
-                MessageBox.Show("File was not saved!", "Warning!");
+                MessageBox.Show("Результат не был сохранен!", "Ошибка!");
             }
         }
 
