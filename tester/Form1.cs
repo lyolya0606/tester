@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Media;
 
 namespace tester {
     public partial class Form1 : Form {
@@ -23,8 +24,6 @@ namespace tester {
         double step;
         double leftBorder;
         double rightBorder;
-        double leftStep;
-        double rightStep;
         int method;
         string coeffs;
         bool isPositive;
@@ -35,21 +34,20 @@ namespace tester {
         List<string> resultsForTestExpected = new List<string>();
         List<string> resultsForTestFact = new List<string>();
         List<string> dataForSavingInput = new List<string>();
+        List<double> calcTimes = new List<double>();
 
         Dictionary<string, int> myDict = new Dictionary<string, int>
         {
             { "парабол", 1 },
             { "трапеции", 2 },
-           { "Монте-Карло", 3 },
+            { "Монте-Карло", 3 },
         };
 
-        public double Integral() {
+        public double Integral(int n) {
             double s = 0;
             double leftPower = leftBorder;
             double rightPower = rightBorder;
-            for (int i = 0; i < coeffsList.Count(); i++) {
-
-                //s += coeffsList[i] * ((Math.Pow(rightBorder, i + 1) / (i + 1)) - (Math.Pow(leftBorder, i + 1) / (i + 1)));
+            for (int i = 0; i < n; i++) {
                 s += coeffsList[i] * ((rightPower - leftPower) / (i + 1));
                 leftPower *= leftBorder;
                 rightPower *= rightBorder;
@@ -58,6 +56,7 @@ namespace tester {
         }
 
         private void generateTests_button_Click(object sender, EventArgs e) {
+            GenerateCoeffs();
             isFileClicked = false;
             countTests = (int)count_numericUpDown.Value;
             errorRate = (double)errorRate_numericUpDown.Value;
@@ -66,8 +65,6 @@ namespace tester {
             rightBorder = (double)right_numericUpDown.Value;
             method = myDict[method_comboBox.SelectedItem.ToString()];
             coeffs = coef_textBox.Text;
-            leftStep = (double)leftStep_numericUpDown.Value;
-            rightStep = (double)rightStep_numericUpDown.Value;
             isPositive = positive_radioButton.Checked;
             
 
@@ -83,14 +80,10 @@ namespace tester {
                 return;
             }
 
-            if (leftStep >= rightStep) {
-                MessageBox.Show("Правая граница шага должна быть больше левой!", "Ошибка!");
-                return;
-            }
-
             if (argsForTest != null) {
                 ClearLists();
             }
+            
             if (isPositive) {
                 string tests = MakePositiveTests();
                 test_textBox.Text = tests;
@@ -98,6 +91,30 @@ namespace tester {
                 string tests = MakeNegativeTests();
                 test_textBox.Text = tests;
             }
+
+            test_button.Enabled = true;
+            saveTests_button.Enabled = true;
+        }
+
+        private void GenerateCoeffs(){
+            Random rnd = new Random();
+            var result = new List<string>();
+            for (int i = 0; i < 10; i++) {
+                int maxValue = (int)Math.Pow(10, i + 1);
+                if (maxValue < 0)
+                {
+                    maxValue = int.MaxValue;
+                }
+                int start = rnd.Next((int)Math.Pow(10, i), maxValue);
+                bool isPositive = rnd.Next(0, 2) == 0;
+                if (!isPositive)
+                {
+                    start *= -1;
+                }
+                result.Add(start.ToString());
+            }
+
+            coef_textBox.Text = string.Join(" ", result);
         }
 
         private void ClearLists() {
@@ -118,11 +135,21 @@ namespace tester {
 
         private string MakePositiveTest(int n, bool isFile=false) {
             string test = $"TEST {n} P\r\n";
+            var listCoeffForN = coeffs.Split(' ');
+            var coeffForN = "";
+            for (int i = 0; i < n; i++)
+            {
+                coeffForN += listCoeffForN[i];
+                if (i != n - 1)
+                {
+                    coeffForN += " ";
+                }
+            }
+
             if (!isFile) {
-                var step = GetRandomNumber(leftStep, rightStep, n);
-                X = $"{(decimal)leftBorder} {(decimal)rightBorder} {(decimal)step} {method} {coeffs}";
+                X = $"{(decimal)leftBorder} {(decimal)rightBorder} {(decimal)step} {method} {coeffForN}";
             } 
-            double result = Integral();
+            double result = Integral(n);
             test += $"X = {X}\r\n";
             test += $"EPS = {(decimal)errorRate}\r\n";
             test += $"YE = {(decimal)result}\r\n\r\n";
@@ -139,9 +166,7 @@ namespace tester {
         private string MakePositiveTests() {
             string tests = "";
             for (int i = 1; i < countTests + 1; i++) {
-   
                 tests += MakePositiveTest(i, isFileClicked);
-                
             }
             return tests;
         }
@@ -160,9 +185,21 @@ namespace tester {
 
         private string MakeNegativeTest(int n, bool isFile=false) {
             string test = $"TEST {n} N\r\n";
+            var listCoeffForN = coeffs.Split(' ');
+            var coeffForN = "";
+            for (int i = 0; i < n; i++)
+            {
+                coeffForN += listCoeffForN[i];
+                if (i != n - 1)
+                {
+                    coeffForN += " ";
+                }
+            }
+
+
             if (!isFile) {
                 var step = GenerateRandomString(n);
-                X = $"{(decimal)leftBorder} {(decimal)rightBorder} {step} {method} {coeffs}";
+                X = $"{(decimal)leftBorder} {(decimal)rightBorder} {step} {method} {coeffForN}";
             }
             string result = "Шаг интегрирования должен быть в пределах [0.000001;0.5]";
             test += $"X = {X}\r\n";
@@ -187,6 +224,7 @@ namespace tester {
         }
 
         private string TestProgram(string args) {
+            DateTime startTime = DateTime.Now;
             var process = new Process();
 
             process.StartInfo.FileName = @"Integral3x.exe";
@@ -197,17 +235,27 @@ namespace tester {
             process.StartInfo.RedirectStandardInput = true;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.CreateNoWindow = true;
-            process.Start();
+            try
+            {
+                process.Start();
+            } catch (Exception)
+            {
+                MessageBox.Show("Не найден файл программы!");
+            }
 
             string YF = string.Empty;
             YF = process.StandardOutput.ReadLine();//результат полученный из тестируемой праграммы
             process.StandardInput.Write(Keys.Enter);
             process.WaitForExit();
             resultsForTestFact.Add(YF);
+            DateTime endTime = DateTime.Now;
+            TimeSpan elapsed = endTime - startTime;
+            calcTimes.Add(elapsed.TotalMilliseconds);
             return YF;
         }
 
         private void test_button_Click(object sender, EventArgs e) {
+            calcTimes.Clear();
             string resultOfExe = "";
             string successResult = "";
             string failedResult = "";
@@ -215,7 +263,10 @@ namespace tester {
                 string test = argsForTest[i];
                 resultOfExe = TestProgram(test);
                 if (isPositive) {
-                    double dif = Math.Abs(double.Parse(resultOfExe.Substring(4)) - double.Parse(resultsForTestExpected[i]));
+                    var t = resultsForTestExpected[i];
+                    //t = t.Replace(',', '.');
+                    resultOfExe = resultOfExe.Replace('.', ',');
+                    double dif = Math.Abs(double.Parse(resultOfExe.Substring(4)) - double.Parse(t));
                     if (dif <= errorRate) {
                         successResult += PrintResultOfTest(i + 1, 'P', "<=", true);
                         successResult += "\r\n";
@@ -235,14 +286,13 @@ namespace tester {
                         failedResult += "\r\n";
                     }
                 }
-
-                //resultOfExe += "\r\n";
             }
 
             passed_textBox.Text = successResult;
             failed_textBox.Text = failedResult;
 
-            //passed_textBox.Text = resultOfExe;
+            save_result_button.Enabled = true;
+            button_plotTimes.Enabled = true;
         }
 
         private string PrintResultOfTest(int n, char type, string comparator, bool isSuccess) {
@@ -252,7 +302,8 @@ namespace tester {
             double dif = 0;
             if (type == 'P') {
                 YE = double.Parse(resultsForTestExpected[n - 1]);
-                YF = double.Parse(resultsForTestFact[n - 1].Substring(4));
+                var t = resultsForTestFact[n - 1].Replace('.', ',');
+                YF = double.Parse(t.Substring(4));
                 dif = Math.Abs(YE - YF);
             }
             result += $"{argsForTest[n - 1]}\r\n";
@@ -282,6 +333,7 @@ namespace tester {
        
                 using (var sr = new StreamWriter(saveFileDialog.FileName)) {
                     sr.WriteLine(dataForSavingInput.Count);
+                    sr.WriteLine(coeffs);
                     foreach (var data in dataForSavingInput) {
                         sr.WriteLine(data);
                     }
@@ -315,13 +367,16 @@ namespace tester {
             }
             argsForTest.Clear();
             MakeTestsFromSavingInput(data);
-            //CheckingData();
+            test_button.Enabled = true;
+            saveTests_button.Enabled = true;
         }
 
         private void MakeTestsFromSavingInput(List<string> data) {
             string test = "";
             int i = 1;
-            foreach (string d in data) {
+            coeffs = data[0];
+            coef_textBox.Text = data[0];
+            foreach (string d in data.Skip(1)) {
                 string[] splitData =  d.Split('~');
                 test += $"TEST {i} {splitData[0]}\r\n";
                 test += $"X = {splitData[3]}\r\n";
@@ -333,10 +388,7 @@ namespace tester {
                 errorRate = double.Parse(splitData[1]);
                 leftBorder = double.Parse(splitData[3].Split()[0]);
                 rightBorder = double.Parse(splitData[3].Split()[1]);
-                coeffs = splitData[3].Split()[3];
                 coeffsList = ListOfCoeffs();
-
-
 
                 if (splitData[0] == "P") {
                     isPositive = true;
@@ -347,23 +399,13 @@ namespace tester {
                 }
             }
             test_textBox.Text = test;
-            //string test = $"TEST {n} N\r\n";
-            //var step = GenerateRandomString(n);
-            //string X = $"{(decimal)leftBorder} {(decimal)rightBorder} {step} {method} {coeffs}";
-            //string result = "Шаг интегрирования должен быть в пределах [0.000001;0.5]";
-            //test += $"X = {X}\r\n";
-            //test += $"EPS = {(decimal)errorRate}\r\n";
-            //test += $"YE = {result}\r\n\r\n";
-            //argsForTest.Add(X);
-            //resultsForTestExpected.Add(result);
-            //dataForSavingInput.Add($"N~{errorRate}~{result}~{X}");
         }
 
         private List<string> ReadDataFromFile(StreamReader streamReader) {
             List<string> data = new List<string>();
             countTests = int.Parse(streamReader.ReadLine());
             
-            for (int i = 0; i < countTests; i++) {
+            for (int i = 0; i < countTests + 1; i++) {
                 
                 data.Add(streamReader.ReadLine());
           
@@ -385,10 +427,26 @@ namespace tester {
                     sr.WriteLine(failed_textBox.Text);
                     
                 }
-                MessageBox.Show("File was successfully saved!", "Saving!");
+                MessageBox.Show("Файл был успешно сохранен!", "Сохранение!");
             } else {
-                MessageBox.Show("File was not saved!", "Warning!");
+                MessageBox.Show("Файб не был сохранен!", "Предупреждение!");
             }
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void step_numericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button_plotTimes_Click(object sender, EventArgs e)
+        {
+            ChartsForm chartForm = new ChartsForm(calcTimes);
+            chartForm.Show();
         }
     }
 }
